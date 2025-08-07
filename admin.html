@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Danh sách vị trí người dùng</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  </head>
+  <body>
+    <h1>📍 Vị trí người dùng đã gửi</h1>
+    <ul id="list"></ul>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCb5oNoQPUQT-r3fiwHf0dEzm6z_B6nWA4",
+        authDomain: "cuong-a179d.firebaseapp.com",
+        projectId: "cuong-a179d",
+        storageBucket: "cuong-a179d.firebasestorage.app",
+        messagingSenderId: "452569201467",
+        appId: "1:452569201467:web:516311a3b060d6d9d8551e",
+        measurementId: "G-RBPRXXBPCP",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.database();
+      const list = document.getElementById("list");
+
+      db.ref("locations").on("value", (snapshot) => {
+        const data = snapshot.val();
+        list.innerHTML = "";
+
+        if (!data) {
+          list.innerHTML = "<li>Chưa có ai gửi vị trí nào cả 😭</li>";
+          return;
+        }
+
+        for (let key in data) {
+          const item = data[key];
+          const li = document.createElement("li");
+          const link = `https://www.google.com/maps?q=${item.lat},${item.lon}`;
+          li.innerHTML = `🧍 Vị trí: <a href="${link}" target="_blank">${
+            item.lat
+          }, ${item.lon}</a> - 🕒 Lúc: ${new Date(item.time).toLocaleString()}`;
+          list.appendChild(li);
+        }
+      });
+    </script>
+  </body>
+</html>

